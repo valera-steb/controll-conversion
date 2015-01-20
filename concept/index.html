@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            background: gray;
+        }
+
+        #si {
+            position: absolute;
+            top: 30%;
+            max-height: 70%;
+            margin: auto;
+            overflow: auto;
+        }
+
+        #si .matrix > tr > td > div {
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        #si .target {
+            border: 1px solid;
+        }
+
+        #si .target.success {
+            border-color: green;
+        }
+
+        #si .target.targeting {
+            border-color: red;
+        }
+
+        #si .target:last-child {
+            margin-bottom: 0px;
+        }
+
+        #si .target .sub-target {
+            padding-left: 5px;
+        }
+
+        #si .target-wrapper {
+            margin-bottom: 5px;
+        }
+
+        #si .target-wrapper:last-child {
+            margin-bottom: 0px;
+        }
+
+        #si .c-function {
+            border: solid 1px;
+        }
+
+        #si .c-function.active {
+            border-color: green;
+        }
+
+        #si .sub-object-tree {
+            padding-left: 10px;
+            border-left: solid 1px #000000;
+        }
+    </style>
+
+    <script src="../lib/jquery/jquery-1.11.0.min.js"></script>
+    <script src="../lib/knockout/knockout-3.1.0.js"></script>
+    <script src="../lib/requirejs/require.js"
+            data-main="config"></script>
+</head>
+<body>
+<div id="ou">
+    <input data-bind="value: url">
+
+    <div data-bind="text: data"></div>
+
+    <div data-bind="visible: isLoading">loading....</div>
+    <div data-bind="visible: hasError">error</div>
+</div>
+
+<br/>
+
+<div id="si">
+    <table>
+        <tbody class="matrix">
+        <tr>
+            <td data-bind="template: {
+                    name: 'generalConcept-template',
+                    data: generalConcept
+                }"></td>
+
+            <td data-bind="template: {
+                    name: 'targets-template',
+                    data: targets
+                }"></td>
+
+            <td width="500">
+                <div data-bind="foreach: tree">
+                    <div data-bind="template: {
+                    name: 'objectTree-template',
+                    data: $data
+                }"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+
+            <td data-bind="template: {
+                name:'stereotypes-template'
+            }"></td>
+
+            <td>
+                <div data-bind="template: {
+                    name: 'controlImpact-template',
+                    data: controlImpact.impact
+                }"></div>
+
+                <div>Iteration: <span
+                        data-bind="text: iteration"
+                        ></span><br/>
+                    <button data-bind="
+                        click: controlImpact.actions.applyAll
+                    ">apply all
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="templates">
+    <script id="generalConcept-template" type="text/html">
+        <!-- ko foreach: functions -->
+        <div class="c-function"
+             data-bind="
+            text: description.name,
+            css: {'active' : $parent.currentId() == description.name}
+        "></div>
+        <!-- /ko -->
+    </script>
+
+    <script id="stereotypes-template" type="text/html">
+        <table>
+            <tbody data-bind="foreach: stereotypes">
+            <tr>
+                <td data-bind="text: name"></td>
+
+                <td data-bind="text: value"></td>
+            </tr>
+            </tbody>
+        </table>
+    </script>
+
+    <script id="targets-template" type="text/html">
+        <!-- ko foreach: $data -->
+        <div class="target-wrapper"
+             data-bind="css: {'target': subTargets}">
+            <div class="target"
+                 data-bind="
+                    text: name,
+                    css: mark"></div>
+
+            <div class="sub-target"
+                 data-bind="template: {
+                    name: 'targets-template',
+                    data: subTargets,
+                    if: subTargets!=undefined
+                }"></div>
+        </div>
+        <!-- /ko -->
+    </script>
+
+    <script id="objectTree-template" type="text/html">
+        <a href="#"
+           data-bind="click: expand">
+            <span data-bind="text: name"
+                    ></span>: <span data-bind="text: type"
+                ></span>
+        </a>
+
+        <div data-bind="html: value"></div>
+
+        <div class="sub-object-tree" data-bind="foreach: items">
+            <!-- ko template: {
+                name: 'objectTree-template',
+                data: $data
+            } -->
+            <!-- /ko -->
+        </div>
+    </script>
+
+
+    <script id="controlImpact-template" type="text/html">
+        <!-- ko foreach: $data -->
+        <div data-bind="text: JSON.stringify($data)"></div>
+        <!-- /ko -->
+    </script>
+</div>
+</body>
+</html>

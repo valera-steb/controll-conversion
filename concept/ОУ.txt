@@ -1,0 +1,69 @@
+оу:
+.vm
+  .url
+  .data
+  .isLoading
+  .hasError
+  + showError
+  + revertUrl
+.object
+  .urlController
+    .current
+    .setUrl
+  .requester
+    .state
+    .params
+      .url
+      .data
+    .load
+    + error
+    + clearError
+
+
+стереотипы:
+  .uiUrl = vm.url
+  > loadedUrl = o.urlController.current
+  > loadingUrl = o.requester.params.url
+
+  > isLoading = o.requester.state != 'free'
+  > requestState = o.requester.state
+  uiIsLoading = o.vm.isLoading
+
+  > hasError = o.requester.error
+
+цели:
+  .01.hasError==false           - нет ошибок
+    .т.е. о них выдано оповещение.
+
+  .02.loadedUrl == uiUrl        - урл должен быть загружен
+    .isLoading => vm.isLoading  - ui должен отражать статус загрузки
+    .loadingUrl == uiUrl,       - ввод должен быть заблокирован,
+     пока isLoading = true.         пока грузим
+
+  .03.isLoading == false - без setTimeout(actionFree, 500); в o.requester
+
+компараторы:
+  .urlCompare
+
+функции:
+  .lunchLoading(uiUrl) => o.requester.load(uiUrl)
+
+итого:
+  .есть:
+    .4-ре квадрата: состояние, цели, функции, управляющее воздействие (ув).
+    .формирование ув и применение к оу/системе.
+  .надо:
+    .почистить стереотипы.
+    .добавить переключатель:
+      .интересно посмотреть как оно само - старым кодом рулит.
+      + автоприменение.
+    + пошаговое применения ув.
+  .далее:
+    .докрутить отображение ошибки.
+    .целепологание по усложнению:
+      .отрисовать заглушку сервера.
+      .добавить в ui отмену загрузки.
+      .сервер может падать, тогда нужно сменить режим
+        на постоянное пингование сервера.
+    + разбивка параметров на контрольные и свободные.
+    + навигация по структуре
