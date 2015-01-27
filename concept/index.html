@@ -2,65 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <style>
-        body {
-            background: gray;
-        }
-
-        #si {
-            position: absolute;
-            top: 30%;
-            max-height: 70%;
-            margin: auto;
-            overflow: auto;
-        }
-
-        #si .matrix > tr > td > div {
-            max-height: 300px;
-            overflow: auto;
-        }
-
-        #si .target {
-            border: 1px solid;
-        }
-
-        #si .target.success {
-            border-color: green;
-        }
-
-        #si .target.targeting {
-            border-color: red;
-        }
-
-        #si .target:last-child {
-            margin-bottom: 0px;
-        }
-
-        #si .target .sub-target {
-            padding-left: 5px;
-        }
-
-        #si .target-wrapper {
-            margin-bottom: 5px;
-        }
-
-        #si .target-wrapper:last-child {
-            margin-bottom: 0px;
-        }
-
-        #si .c-function {
-            border: solid 1px;
-        }
-
-        #si .c-function.active {
-            border-color: green;
-        }
-
-        #si .sub-object-tree {
-            padding-left: 10px;
-            border-left: solid 1px #000000;
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet" type="text/css">
 
     <script src="../lib/jquery/jquery-1.11.0.min.js"></script>
     <script src="../lib/knockout/knockout-3.1.0.js"></script>
@@ -68,13 +10,32 @@
             data-main="config"></script>
 </head>
 <body>
-<div id="ou">
-    <input data-bind="value: url">
+<div id="ou-container">
+    <div id="ou">
+        Введите url <br/>
+        <input data-bind="value: url">
 
-    <div data-bind="text: data"></div>
+        <div data-bind="text: data"></div>
 
-    <div data-bind="visible: isLoading">loading....</div>
-    <div data-bind="visible: hasError">error</div>
+        <div data-bind="visible: isLoading">loading....</div>
+        <div data-bind="visible: hasError">error</div>
+    </div>
+
+    <div id="stub">
+        модель сервера
+        <div class="active">
+            активен <input type="checkbox">
+        </div>
+
+        <div class="data">
+            Данные <input> <br/>
+            <button>Отправить</button> <br/>
+        </div>
+
+        <div class="cancel">
+            <button>Подтвердить отмену запроса</button>
+        </div>
+    </div>
 </div>
 
 <br/>

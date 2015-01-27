@@ -1,0 +1,65 @@
+body {
+  background: gray;
+}
+#ou {
+  width: 200px;
+  border: solid 2px;
+  display: inline-block;
+  vertical-align: top;
+}
+#stub {
+  width: 300px;
+  border: solid 2px;
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px;
+}
+#stub .active,
+#stub .data {
+  text-align: right;
+}
+#stub .cancel {
+  text-align: center;
+}
+#si {
+  position: absolute;
+  top: 30%;
+  max-height: 70%;
+  margin: auto;
+  overflow: auto;
+}
+#si .matrix > tr > td > div {
+  max-height: 300px;
+  overflow: auto;
+}
+#si .target {
+  border: 1px solid;
+}
+#si .target:last-child {
+  margin-bottom: 0px;
+}
+#si .target.success {
+  border-color: green;
+}
+#si .target.targeting {
+  border-color: red;
+}
+#si .target .sub-target {
+  padding-left: 5px;
+}
+#si .target-wrapper {
+  margin-bottom: 5px;
+}
+#si .target-wrapper:last-child {
+  margin-bottom: 0px;
+}
+#si .c-function {
+  border: solid 1px;
+}
+#si .c-function.active {
+  border-color: green;
+}
+#si .sub-object-tree {
+  padding-left: 10px;
+  border-left: solid 1px #000000;
+}

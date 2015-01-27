@@ -1,0 +1,81 @@
+body {
+  background: gray;
+}
+
+#ou {
+  width: 200px;
+  border: solid 2px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#stub {
+  width: 300px;
+  border: solid 2px;
+  display: inline-block;
+  vertical-align: top;
+
+  margin-left: 20px;
+
+  .active, .data {
+    text-align: right;
+  }
+
+  .cancel {
+    text-align: center;
+  }
+}
+
+#si {
+  position: absolute;
+  top: 30%;
+  max-height: 70%;
+  margin: auto;
+  overflow: auto;
+
+  .matrix > tr > td > div {
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  .target {
+    border: 1px solid;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+
+    &.success {
+      border-color: green;
+    }
+
+    &.targeting {
+      border-color: red;
+    }
+
+    .sub-target {
+      padding-left: 5px;
+    }
+  }
+
+  .target-wrapper {
+    margin-bottom: 5px;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  .c-function {
+    border: solid 1px;
+
+    &.active {
+      border-color: green;
+    }
+  }
+
+  .sub-object-tree {
+    padding-left: 10px;
+    border-left: solid 1px #000000;
+  }
+}
