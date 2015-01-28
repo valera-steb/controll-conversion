@@ -3,13 +3,16 @@
  */
 require.config({
     paths:{
-        'OU':'OU'
+        'OU':'OU',
+        'text': 'lib/requirejs/text'
     },
     callback:function(){
         require(['OU/M', 'OU/VM'], function(M, VM){
             var
                 m = new M(),
                 vm = new VM(m);
+
+            window.vm = vm;
 
             ko.applyBindings(vm);
         })

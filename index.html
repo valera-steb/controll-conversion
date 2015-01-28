@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 
     <script src="lib/jquery/jquery-1.11.0.min.js"></script>
-    <script src="lib/knockout/knockout-3.1.0.js"></script>
+    <script src="lib/knockout/knockout-3.2.0.js"></script>
     <script src="lib/requirejs/require.js"
             data-main="config"></script>
 </head>
@@ -14,5 +14,8 @@
 
 <div data-bind="visible: isLoading">loading....</div>
 <div data-bind="visible: hasError">error</div>
+
+<ou-w params="parent: $data"></ou-w>
+
 </body>
 </html>
