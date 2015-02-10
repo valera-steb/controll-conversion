@@ -5,8 +5,6 @@ define([
     'text!OU/v/ou.html'
 ], function(html){
     function Ou(p){
-        debugger;
-
         var vm = $.extend(this, {
             url: ko.observable(''),
             data: ko.observable(''),
@@ -14,7 +12,11 @@ define([
             hasError: ko.observable(false)
         });
 
-        p.parent.ou=vm;
+        vm.setUpLS = function(ls){
+            vm.lockScreen = ls;
+        };
+
+        p.setUpOu(vm);
         return vm;
     };
 

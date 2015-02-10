@@ -7,6 +7,7 @@ require.config({
         'text': 'lib/requirejs/text'
     },
     callback:function(){
+        //факт: есть ответственность всех создать в самом начале
         require(['OU/M', 'OU/VM'], function(M, VM){
             var
                 m = new M(),

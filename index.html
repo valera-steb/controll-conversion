@@ -9,13 +9,10 @@
             data-main="config"></script>
 </head>
 <body>
-<input data-bind="value: url">
-<div data-bind="text: data"></div>
 
-<div data-bind="visible: isLoading">loading....</div>
-<div data-bind="visible: hasError">error</div>
+<ou-w params="setUpOu: setUpOu"></ou-w>
 
-<ou-w params="parent: $data"></ou-w>
+<server-model></server-model>
 
 </body>
 </html>

@@ -1,15 +1,21 @@
-<div id="stub">
-    модель сервера
-    <div class="active">
-        активен <input type="checkbox">
-    </div>
-
-    <div class="data">
-        Данные <input> <br/>
-        <button>Отправить</button> <br/>
-    </div>
-
-    <div class="cancel">
-        <button>Подтвердить отмену запроса</button>
-    </div>
+модель сервера
+<div class="active">
+    активен <input type="checkbox" data-bind="check: isActive">
 </div>
+
+<div class="dialog">
+    Данные <input data-bind="value: data"> <br/>
+    <button data-bind="click: send">Отправить</button>
+    <br/>
+
+    <button data-bind="click: makeError">Отправить ошибку</button>
+    <br/>
+
+    <div class="lock"
+         data-bind="visible: waitData"></div>
+</div>
+
+<button data-bind="
+click: makeCancel,
+visible: isCanceling">Подтвердить отмену запроса
+</button>
