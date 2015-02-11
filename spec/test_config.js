@@ -7,7 +7,7 @@ require.config({
     },
     callback: function () {
         var specs = [
-            "ouS/serverContextSpec"
+            "ouS/serverModelSpec"
         ];
 
         require(specs, function () {

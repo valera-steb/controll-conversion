@@ -2,25 +2,28 @@
  * Created by steb on 10.02.2015.
  */
 define([
-
 ], function () {
-    return function ServerContext(server) {
+    return function ServerContext(server, Server) {
         var _ = $.extend(this, {
             hasError: false
         });
 
         _.clean = function () {
             _.hasError = false;
+
+            return _;
         };
 
         //-----------------------------
         // get request
         _.validateGet = function () {
+            preValidate();
+            if (_.hasError) return _;
+
             _.hasError = server.getDeferred() != undefined;
 
-            // TODO: может что другое?
             if (_.hasError)
-                throw new Error('can`t send second request');
+                server.callError(Server.callErrors.oneGet);
 
             return _;
         };
@@ -28,16 +31,15 @@ define([
         _.makeGetDeferred = function (url) {
             if (_.hasError) return _;
 
-            makeSelfCleanDeferred('getDeferred');
-            server.requestedUrl(url);
+            if (server.isActive()) {
+                makeSelfCleanDeferred('getDeferred');
+                server.requestedUrl(url);
+            }
 
             return _;
         };
 
         _.doneGet = function () {
-            if (!_.hasError && !server.isActive())
-                server.getDeferred().reject();
-
             return getPromise(
                 server.getDeferred()
             );
@@ -46,15 +48,17 @@ define([
         //-----------------------------
         // cancel request
         _.validateCancel = function () {
+            preValidate();
+            if (_.hasError) return _;
+
             var
                 deferred = server.getDeferred();
 
-            _.hasError = deferred != undefined
-                && deferred.state() == "pending";
+            _.hasError = deferred == undefined
+                || deferred.state() != "pending";
 
-            // TODO: может что другое?
             if (_.hasError)
-                throw new Error('can`t send second request');
+                server.callError(Server.callErrors.cancelError);
 
             return _;
         };
@@ -66,10 +70,10 @@ define([
                 cancelDeferred = makeSelfCleanDeferred('cancelDeferred'),
                 getDeferred = server.getDeferred();
 
-            //факт: если гет сработал, то отмена отклонена
-            getDeferred.done(cancelDeferred.reject);
-
-            //факт: если отмена сработала, то гет отменён
+            //факт:3.запрос и отмена взаимосвязаны
+            //факт:3.1.отмена отклоняеться, по ответу на запрос
+            getDeferred.always(cancelDeferred.reject);
+            //факт:3.2.запрос отклоняется по подтверждению отмены
             cancelDeferred.done(getDeferred.reject);
 
             return _;
@@ -85,9 +89,9 @@ define([
         // utils
         function getPromise(deferred) {
             return (
-                _.hasError
-                    ? (new $.Deferred()).reject()
-                    : deferred
+                    _.hasError || !deferred
+                ? (new $.Deferred()).reject()
+                : deferred
                 ).promise();
         };
 
@@ -97,11 +101,21 @@ define([
 
             deferred.always(function () {
                 server[field](undefined);
+
+                if (field == 'getDeferred')
+                    server.requestedUrl(undefined);
             });
 
             server[field](deferred);
 
             return deferred;
+        }
+
+        function preValidate() {
+            if (server.callError()) {
+                _.hasError = true;
+                server.callError(Server.callErrors.unclean);
+            }
         }
 
         return _;
