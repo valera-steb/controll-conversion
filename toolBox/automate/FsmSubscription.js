@@ -30,7 +30,7 @@ define([
 
             delegatesMap.activate(makeOutKey(s.prev), fsm.params, s);
             delegatesMap.activate(makeTransitKey(s.prev, s.current), fsm.params, s);
-            delegatesMap.activate(makeInKey(s.prev), fsm.params, s);
+            delegatesMap.activate(makeInKey(s.current), fsm.params, s);
         });
 
         return fsmSubscription;

@@ -76,7 +76,7 @@ define([
         _.exitTasker = function () {
             if (_.enteredTasker) {
                 if (_.error)
-                    makeError({error: _.error});
+                    makeError(_, {error: _.error});
 
                 tasker.exit();
             }

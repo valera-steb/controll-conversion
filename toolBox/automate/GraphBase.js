@@ -7,17 +7,18 @@ define([
 ], function (FsmSubscription, GraphContext) {
     return function GraphBase(_tasker, _params) {
         var
-            _,
+            _transitionsMap,
             graphBase = $.extend(this, {
                     state: {
                         current: ko.observable(),
-                        prev: undefined
+                        prev: undefined,
+                        all: undefined
                     },
                     params: {},
                     error: undefined,
 
                     actions: {},
-                    subscribe: undefined,
+                    subscribe: {},
                     reset: undefined
                 }
             );
@@ -35,20 +36,20 @@ define([
                 actions = buildObject(_params.actions),
                 transitions = _params.getTransitions(
                     states, actions, _params.validators
-                ),
-                transitionsMap = buildMap(transitions);
+                );
 
-            _ = new GraphContext(_tasker,
-                _params.mark,
-                transitionsMap, errorAction);
+            _transitionsMap = buildMap(transitions);
 
             $.each(actions, function (name) {
                 graphBase.actions[name] = makeAction(name);
             });
 
-            graphBase.state.current(
-                transitions[0][0]
-            );
+            with (graphBase.state) {
+                all = states;
+                current(
+                    transitions[0][0]
+                );
+            }
         }
 
         function switchTo(state) {
@@ -58,7 +59,7 @@ define([
             }
         }
 
-        function errorAction(params) {
+        function errorAction(_, params) {
             _.error = undefined;
 
             _.copyParams(
@@ -71,8 +72,11 @@ define([
         function makeAction(actionName) {
 
             function action(params) {
-                _.clean(
-                ).enterTasker(
+                var _ = new GraphContext(
+                    _tasker, _params.mark,
+                    _transitionsMap, errorAction);
+
+                _.enterTasker(
                     action,
                     params
                 ).validateTransition(
@@ -120,10 +124,10 @@ define([
         return map;
     }
 
-    function _get(from, path){
+    function _get(from, path) {
         var current = from || {};
 
-        $.each(path, function(i, segment){
+        $.each(path, function (i, segment) {
             current = current[segment];
             return current;
         });
