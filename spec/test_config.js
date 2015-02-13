@@ -3,11 +3,13 @@
  */
 require.config({
     paths: {
-        'OU': '../OU'
+        'OU': '../OU',
+        'toolBox': '../toolBox'
     },
     callback: function () {
         var specs = [
-            "ouS/serverModelSpec"
+            "ouS/serverModelSpec",
+            'toolBoxS/graphInfrastructureSpec'
         ];
 
         require(specs, function () {

@@ -2,14 +2,20 @@
  * Created by steb on 07.01.15.
  */
 define([
-], function () {
+    'OU/m/Server'
+], function (Server) {
     return function Requester() {
         var requester = $.extend(this, {
+            server: new Server(),
+
             state: ko.observable('free'),
             oldState: '',
             params: {
-                url: ko.observable(undefined)
+                url: ko.observable(undefined),
+                getPromise: undefined,
+                cancelPromise: undefined
             },
+
             actions: {
                 load: actionLoad,
                 free: actionFree
