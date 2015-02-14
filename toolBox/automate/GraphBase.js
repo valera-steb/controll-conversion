@@ -69,6 +69,8 @@ define([
             ).make(
                 switchTo, graphBase.state.error
             );
+
+            console.error((params.error));
         }
 
         function makeAction(actionName) {

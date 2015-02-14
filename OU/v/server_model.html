@@ -1,21 +1,23 @@
 модель сервера
 <div class="active">
-    активен <input type="checkbox" data-bind="check: isActive">
+    активен <input type="checkbox" data-bind="checked: isActive">
 </div>
 
 <div class="dialog">
     Данные <input data-bind="value: data"> <br/>
-    <button data-bind="click: send">Отправить</button>
-    <br/>
+    <button data-bind="click: send">Ответить</button>
 
-    <button data-bind="click: makeError">Отправить ошибку</button>
+    <button data-bind="click: makeError">Отклонить запрос</button>
     <br/>
 
     <div class="lock"
          data-bind="visible: waitData"></div>
 </div>
 
-<button data-bind="
-click: makeCancel,
-visible: isCanceling">Подтвердить отмену запроса
-</button>
+<div data-bind="visible: isCanceling">
+    Отмена запроса:
+    <button data-bind="click: makeCancel">
+        Подтвердить
+    </button>
+    <button data-bind="click: cancelCancel">Отменить</button>
+</div>

@@ -2,6 +2,7 @@
  * Created by steb on 12.02.15.
  */
 define([
+    'toolBox/stringUtils'
 ], function () {
     function GraphContext(tasker, mark, map, makeError) {
         var _ = $.extend(this, {
@@ -40,7 +41,8 @@ define([
                 : undefined;
 
             if (_.transition === undefined)
-                _.error = GraphContext.errors.hasNoTransition;
+                _.error = GraphContext.errors.hasNoTransition
+                    .format(state, action);
 
             return _;
         };
@@ -94,7 +96,7 @@ define([
     };
 
     GraphContext.errors = {
-        hasNoTransition: 'из данного состояния нет перехода по данному методу',
+        hasNoTransition: 'из состояния [{0}] нет перехода по методу [{1}]',
         validationError: 'валидатор графа не пропустил'
     };
 

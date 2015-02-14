@@ -2,7 +2,7 @@
  * Created by steb on 10.02.2015.
  */
 define([
-    'OU/m/Server'
+    'OU/m/Server/Model'
 ], function (Server) {
 
     describe('Модель сервера (OU/m/Server)', function () {

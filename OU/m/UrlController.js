@@ -3,28 +3,21 @@
  */
 define([
 ], function () {
-    return function UrlController(m) {
+    return function UrlController(requester) {
         var urlController = $.extend(this, {
             current: ko.observable(''),
 
-            setUrl: setUrl
-        });
+            setUrl: function setUrl(url) {
+                if (urlController.current() == url)
+                    return false;
 
-        // уйдёт, станет прямым вызовом установки от СУ
-        m.requester.state.subscribe(function (s) {
-            if (s != 'loaded')
-                return;
-            //TODO: add switch
-            //urlController.current(m.requester.params.url());
+                requester.actions.get({url: url});
+            },
+            setLoadedUrl: function (params) {
+                urlController.current(params.fail ? '' : params.url);
+            }
         });
 
         return urlController;
-
-        function setUrl(url) {
-            if (urlController.current() == url)
-                return false;
-
-            return m.requester.actions.load(url);
-        }
     };
 });

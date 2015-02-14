@@ -5,7 +5,7 @@
 //факт:1.1.если есть запрос - его нельзя переотправить
 //факт:1.2.если нет запроса - его нельзя отменить
 define([
-    'OU/m/ServerContext'
+    'OU/m/Server/Context'
 ], function (ServerContext) {
     function Server() {
         var server = $.extend(this, {

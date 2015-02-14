@@ -8,12 +8,12 @@ require.config({
     },
     callback:function(){
         //факт: есть ответственность всех создать в самом начале
-        require(['OU/M', 'OU/VM'], function(M, VM){
+        require(['OU/M', 'OU/VM', 'native/M'], function(M, VM, nativeM){
             var
                 m = new M(),
                 vm = new VM(m);
 
-            window.vm = vm;
+            new nativeM(m);
 
             ko.applyBindings(vm);
         })

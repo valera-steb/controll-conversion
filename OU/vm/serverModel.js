@@ -3,35 +3,45 @@
  */
 define([
     'text!OU/v/server_model.html'
-], function(html){
-    function ServerModel(){
-        var sm = $.extend(this, {
-            data: ko.observable(),
+], function (html) {
+    function ServerModel(params) {
+        with (params) {
+            var sm = $.extend(this, {
+                data: ko.observable(),
 
-            isActive: ko.observable(true),
-            hasRequest: ko.observable(false),
-            isCanceling: ko.observable(false),
+                isActive: server.isActive,
+                hasRequest: server.getDeferred,
+                isCanceling: server.cancelDeferred,
 
-            waitData: undefined
-        });
-        sm.waitData = ko.computed(isWait);
+                waitData: undefined,
 
-        //todo: где-то должен быть объект, с урл и deferred-ом
+                send: function () {
+                    server.getDeferred()
+                        .resolve(sm.data());
+                },
+                makeError: function () {
+                    server.getDeferred()
+                        .reject();
+                },
+                makeCancel: function () {
+                    server.cancelDeferred()
+                        .resolve();
+                },
+                cancelCancel: function () {
+                    server.cancelDeferred()
+                        .reject();
+                }
+            });
 
-        sm.send = function () {
-            //todo: resolve deferred
-        };
-        sm.makeError = function(){
-            //todo: failed deferred
-        };
-        sm.makeCancel = function(){
-            //todo: ?
-        };
-        return sm;
+            sm.waitData = ko.computed(isWait);
+
+            setUp(sm);
+            return sm;
 
 
-        function isWait(){
-            return !sm.isActive() || !sm.hasRequest();
+            function isWait() {
+                return !sm.isActive() || !sm.hasRequest();
+            }
         }
     }
 

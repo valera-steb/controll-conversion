@@ -4,7 +4,15 @@
 
     <div data-bind="text: data"></div>
 
-    <div data-bind="visible: isLoading">loading....</div>
+    <div data-bind="visible: isLoading">
+        loading....
+
+        <button data-bind="
+        visible: !isCanceling(),
+        click: cancel">cancel</button>
+
+        <span data-bind="visible: isCanceling">canceling...</span>
+    </div>
     <div data-bind="visible: hasError">error</div>
 </div>
 

@@ -70,7 +70,8 @@ define([
 
                 expect(state.current()).toBe('"_error_"');
                 expect(state.prev).toBe('s01');
-                expect(error).toBe(GraphContext.errors.hasNoTransition);
+                expect(error).toBe(GraphContext.errors.hasNoTransition
+                    .format('s01', 'g03'));
             }
         });
 

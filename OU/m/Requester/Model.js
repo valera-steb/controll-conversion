@@ -4,7 +4,7 @@
 define([
     'OU/m/Requester/Graph',
     'toolBox/automate/GraphBase',
-    'OU/m/Server'
+    'OU/m/Server/Model'
 ], function (graph, GraphBase, Server) {
     return function Create(tasker) {
         function Requester(){
