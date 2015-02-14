@@ -29,19 +29,23 @@ define([
         };
 
         _.makeGetDeferred = function (url) {
-            if (_.hasError) return _;
+            if (_.hasError || !server.isActive())
+                return _;
 
-            if (server.isActive()) {
-                makeSelfCleanDeferred('getDeferred');
-                server.requestedUrl(url);
-            }
+            _.getDeffered = new $.Deferred();
+            var
+                getD = makeSelfCleanDeferred('getDeferred'),
+                f = makeCancelCheck(_.getDeffered, getD);
+
+            getD.done(f).fail(f);
+            server.requestedUrl(url);
 
             return _;
         };
 
         _.doneGet = function () {
             return getPromise(
-                server.getDeferred()
+                _.getDeffered
             );
         };
 
@@ -71,8 +75,6 @@ define([
                 getDeferred = server.getDeferred();
 
             //факт:3.запрос и отмена взаимосвязаны
-            //факт:3.1.отмена отклоняеться, по ответу на запрос
-            getDeferred.always(cancelDeferred.reject);
             //факт:3.2.запрос отклоняется по подтверждению отмены
             cancelDeferred.done(getDeferred.reject);
 
@@ -116,6 +118,21 @@ define([
                 _.hasError = true;
                 server.callError(Server.callErrors.unclean);
             }
+        }
+
+        function makeCancelCheck(getD, calledD) {
+            return function (data) {
+                var cD = server.cancelDeferred();
+
+                //факт:3.1.отмена отклоняеться, по ответу на запрос
+                if (cD)
+                    cD.reject();
+
+                if (calledD.state() == 'resolved')
+                    getD.resolve(data);
+                else
+                    getD.reject(data);
+            };
         }
 
         return _;

@@ -12,6 +12,9 @@ define([
                     state: {
                         current: ko.observable(),
                         prev: undefined,
+
+                        first: undefined,
+                        error: '"_error_"',
                         all: undefined
                     },
                     params: {},
@@ -46,9 +49,8 @@ define([
 
             with (graphBase.state) {
                 all = states;
-                current(
-                    transitions[0][0]
-                );
+                first = transitions[0][0];
+                current(first);
             }
         }
 
@@ -65,7 +67,7 @@ define([
             _.copyParams(
                 graphBase, params
             ).make(
-                switchTo, '"_error_"'
+                switchTo, graphBase.state.error
             );
         }
 

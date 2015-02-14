@@ -41,6 +41,10 @@ define([
             );
         });
 
+        it('по умолчанию в начальном состоянии', function(){
+
+        });
+
         it('выполняет допустимый переход', function () {
             with (graphBase) {
                 actions.g02();
@@ -80,6 +84,10 @@ define([
                 expect(error).toBe(GraphContext.errors.validationError);
                 expect(JSON.stringify(params)).toBe(JSON.stringify({}));
             }
+        });
+
+        it('сбрасываеться в начальное состояние', function(){
+
         });
     });
 

@@ -6,23 +6,32 @@ define([
 ], function (DelegatesMap) {
     return function FsmSubscription(fsm) {
         var
+            keyAfter ='key:after_state_subscriptions',
+
             delegatesMap = new DelegatesMap(),
 
             fsmSubscription = $.extend(this, {
-                onTransition: function(from, to, handler, context){
+                onTransition: function (from, to, handler, context) {
                     return delegatesMap.add(makeTransitKey(from, to), handler, context)
                 },
-                onLeaveState: function(state, handler, context){
+                onLeaveState: function (state, handler, context) {
                     return delegatesMap.add(makeOutKey(state), handler, context)
                 },
-                onEnterState: function(state, handler, context){
+                onEnterState: function (state, handler, context) {
                     return delegatesMap.add(makeInKey(state), handler, context)
+                },
+
+                onLeaveFromStates: makeGroupFunction('onLeaveState'),
+                onEnterToStates: makeGroupFunction('onEnterState'),
+
+                afterTransition: function(handler, context){
+                    return delegatesMap.add(keyAfter, handler, context);
                 },
 
                 delegatesMapErrors: delegatesMap.exceptions
             });
 
-        fsm.state.current.subscribe(function FsmSubscriptionHandler(v){
+        fsm.state.current.subscribe(function FsmSubscriptionHandler(v) {
             var s = {
                 prev: fsm.state.prev,
                 current: v
@@ -31,6 +40,8 @@ define([
             delegatesMap.activate(makeOutKey(s.prev), fsm.params, s);
             delegatesMap.activate(makeTransitKey(s.prev, s.current), fsm.params, s);
             delegatesMap.activate(makeInKey(s.current), fsm.params, s);
+
+            delegatesMap.activate(keyAfter, fsm, s);
         });
 
         return fsmSubscription;
@@ -38,16 +49,23 @@ define([
 
         //-------------------
         // helpers
-        function makeOutKey(state){
+        function makeOutKey(state) {
             return 'out =>' + state;
         }
 
-        function makeTransitKey(from, to){
+        function makeTransitKey(from, to) {
             return from + '=>' + to;
         }
 
-        function makeInKey(state){
+        function makeInKey(state) {
             return 'in =>' + state;
+        }
+
+        function makeGroupFunction(base) {
+            return function (states, handler, context) {
+                for (var i in states)
+                    fsmSubscription[base](states[i], handler, context);
+            };
         }
     };
 });

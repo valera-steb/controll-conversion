@@ -5,7 +5,7 @@ define([
     'OU/m/Server'
 ], function (Server) {
 
-    describe('OU/m/Server', function () {
+    describe('Модель сервера (OU/m/Server)', function () {
         var
             server, url;
 
@@ -107,8 +107,12 @@ define([
         });
 
         describe('ответ на запрос', function () {
+            var
+                history;
+
             beforeEach(function () {
                 server.get(url);
+                history = '';
             });
 
             it('очищает параметры запроса', function () {
@@ -118,14 +122,25 @@ define([
                 expect(server.requestedUrl()).toBeUndefined();
             });
 
-            it('отклоняет отмену запроса', function () {
-                var promise = server.cancel();
+            it('отклоняет отмену запроса (в начале отмена, потом ответ)', function () {
+                var
+                    promise = server.cancel();
+
+                server.getDeferred().always(makeLog('get_'));
+                promise.always(makeLog('cancel_'));
 
                 server.getDeferred().resolve();
 
                 expect(server.cancelDeferred()).toBeUndefined();
                 expect(promise.state()).toBe('rejected');
+                expect(history).toBe('cancel_get_');
             });
+
+            function makeLog(name){
+                return function(){
+                    history += name;
+                };
+            }
         });
 
         describe('fact:2.запрос отклоняеться, если сервер дезактивируеться', function () {

@@ -8,12 +8,20 @@ require.config({
     },
     callback: function () {
         var specs = [
+            'ouS/requesterModelSpec',
             "ouS/serverModelSpec",
             'toolBoxS/graphInfrastructureSpec'
         ];
 
-        require(specs, function () {
-            window.onload();
-        });
+        (function getSpec(id) {
+            if (id == specs.length) {
+                window.onload();
+                return;
+            }
+
+            require([specs[id]], function () {
+                getSpec(id + 1);
+            });
+        })(0);
     }
 });
