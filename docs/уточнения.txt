@@ -75,3 +75,34 @@ c.prototype = proto;
 
 var o = new c();
 o.x = 20; !!! тут перекрываеться o.x объекта с, но в прототипе х остаёться 10.
+
+
+BDD тестирование
+.библиотеки:
+  .Jasmine-species http://rudylattae.github.io/jasmine-species/docs.html
+  .cucumber.js http://transitioning.to/2012/01/cucumber-and-js-getting-started-with-cucumber-js/
+  .cucumberjs-browser
+  .mimik https://github.com/simoami/mimik
+  .yadda https://github.com/acuminous/yadda
+
+.характеристики:
+  .cucumber.js - нельзя запускать в браузере.
+
+  .Jasmine-species
+    - зависит от стрёмной библиотеки namespacedotjs https://github.com/smith/namespacedotjs
+      .пока не понял профита в ней... т.к. приходиться создавать файлы описания классов.
+    ? пока не понял как с таблицами параметров действовать
+
+  .cucumberjs-browser
+    .переформатирует код для выполнения в браузере.
+    + выделенные файлы под описание функциональности
+    - интерфейс
+    ? нужна node.js
+
+  .mimik
+    ? пока не понятно что он в браузер выдаёт
+
+.текущий вывод:
+  .попробовать 2 библиотеки поднять: Jasmine-species и cucumberjs-browser.
+  .функциональное тестирование оказалось чуть больше:
+    .зачастую требует большего - управление браузером со стороны.

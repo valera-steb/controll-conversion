@@ -20,6 +20,7 @@ define([
         };
         vm.cancel = function () {
             vm.isCanceling(true);
+            //TODO: это тоже не тут...
             p.m.requester.actions.cancel();
         };
 

@@ -11,6 +11,10 @@ define([
                 if (urlController.current() == url)
                     return false;
 
+                with (requester.state)
+                    if (current() != all.free)
+                        return false;
+
                 requester.actions.get({url: url});
             },
             setLoadedUrl: function (params) {

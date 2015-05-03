@@ -6,32 +6,37 @@ define([
 
 ], function () {
     return function VM(m, vm) {
-        vm.url.subscribe(function (v) {
-            var loading = m.urlController.setUrl(v);
+        var
+            _Ou = vm._Ou;
 
-            if (!loading) {
-                vm.hasError(true);
-                setTimeout(revertUrl, 500);
-            }
-        });
-        m.requester.state.subscribe(function (s) {
-            vm.isLoading(s != 'free');
-            var key = m.requester.oldState + '_' + s;
+        vm._Ou = function(c){
+            _Ou(c);
+            initOu();
+        };
 
-            switch (key) {
-                case ('loading_loaded'):
-                    vm.data(JSON.stringify(m.requester.params.data));
-                    break;
-                case ('loading_cancel'):
-                    // revert url
-                    revertUrl();
-                    break;
-            }
-        });
+        return vm;
 
-        function revertUrl() {
-            vm.url(m.urlController.current());
-            vm.hasError(false);
+        function initOu() {
+            vm.ou.url.subscribe(function (v) {
+            });
+
+
+//TODO: перестроить под новый Requester
+//            m.requester.state.subscribe(function (s) {
+//                vm.isLoading(s != 'free');
+//                var key = m.requester.oldState + '_' + s;
+//
+//                switch (key) {
+//                    case ('loading_loaded'):
+//                        vm.data(JSON.stringify(m.requester.params.data));
+//                        break;
+//                    case ('loading_cancel'):
+//                        // revert url
+//                        revertUrl();
+//                        break;
+//                }
+//            });
         }
+
     };
 });
