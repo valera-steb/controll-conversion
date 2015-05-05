@@ -6,7 +6,7 @@ define([
 ], function (html) {
     function Ou(p) {
         var vm = $.extend(this, {
-            url: ko.observable(''),
+            url: p.m.urlController.currentUrl,
             data: ko.observable(''),
 
             isLoading: ko.observable(false),
@@ -51,14 +51,10 @@ define([
         function setNewData(params) {
             vm.isLoading(false);
             vm.data(params.data);
-
-            if (params.fail)
-                vm.url('');
         }
 
         function cleanData() {
             vm.data('');
-            vm.url('');
             vm.isLoading(false);
         }
 

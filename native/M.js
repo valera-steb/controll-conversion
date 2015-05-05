@@ -1,30 +1,23 @@
 /**
  * Created by steb on 10.02.2015.
  */
-define([
-
-], function(){
+define([], function () {
     return function M(m) {
 
         with (m.requester.subscribe) with (m.requester.state.all) {
             // for requester
             onEnterToStates([canceled, loaded], function () {
+                m.urlController.loadingUrl(undefined);
                 m.requester.actions.free();
             });
-
-            // for urlController
-           onEnterState(loaded, m.urlController.setLoadedUrl);
         }
 
-        m.lunchLoading = function(url){
-            var loading = m.urlController.setUrl(v);
+        m.urlController.loadingUrl.subscribe(function (newUrl) {
+            if (newUrl == undefined || newUrl == '')
+                return;
 
-            if (!loading) {
-                vm.hasError(true);
-                setTimeout(revertUrl, 500);
-            }
-
-        };
+            m.requester.actions.get({url: newUrl});
+        });
 
         return m;
 

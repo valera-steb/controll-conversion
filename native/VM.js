@@ -17,8 +17,6 @@ define([
         return vm;
 
         function initOu() {
-            vm.ou.url.subscribe(function (v) {
-            });
 
 
 //TODO: перестроить под новый Requester

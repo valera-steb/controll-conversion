@@ -1,25 +1,26 @@
 /**
  * Created by steb on 07.01.15.
  */
-define([
-], function () {
+define([], function () {
     return function UrlController(requester) {
         var urlController = $.extend(this, {
-            current: ko.observable(''),
+            currentUrl: ko.observable(),
+            loadingUrl: ko.observable()
+        });
 
-            setUrl: function setUrl(url) {
-                if (urlController.current() == url)
-                    return false;
+        urlController.currentUrl.subscribe(function (newUrl) {
+            var
+                loadingUrl = urlController.loadingUrl(),
+                hasNewUrl = newUrl != '' && newUrl != undefined;
 
-                with (requester.state)
-                    if (current() != all.free)
-                        return false;
+            if (loadingUrl == undefined) {
+                if (!hasNewUrl)
+                    return;
 
-                requester.actions.get({url: url});
-            },
-            setLoadedUrl: function (params) {
-                urlController.current(params.fail ? '' : params.url);
+                urlController.loadingUrl(newUrl);
             }
+            else
+                urlController.currentUrl(loadingUrl);
         });
 
         return urlController;
