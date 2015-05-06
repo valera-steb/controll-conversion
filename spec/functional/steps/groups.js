@@ -25,8 +25,15 @@ groupSteps('нативная реализация')
             );
             $('body').append(featureCtx.jUi);
             ko.applyBindings(vm, featureCtx.jUi[0]);
-            setTimeout(done, 200);
+            setTimeout(done, 200); //500 for deploy
         })
+    })
+    .given('инициализированный объект', function () {
+        expect(this.m).toBeDefined();
+        expect(this.vm).toBeDefined();
+    })
+    .when('ввели урл "(.*)"', function(url){
+        this.vm.ou.url(url);
     })
     .after(function(ctx){
         //debugger;
