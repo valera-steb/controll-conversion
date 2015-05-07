@@ -56,6 +56,7 @@ define([
         function cleanData() {
             vm.data('');
             vm.isLoading(false);
+            vm.isCanceling(false);
         }
 
         function showCancelButton(){
