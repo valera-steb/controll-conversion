@@ -15,11 +15,11 @@ require.config({
         require([
             'browsered-jasmine-cucumber',
             'spec/native',
-            'spec/ou',
 
-            'steps/ou',
-            'steps/native',
-            'steps/groups'
+            'steps/groups',
+            'steps/sendRequest',
+            'steps/cancelSentRequest',
+            'steps/serverFallDown'
         ], function () {
             var runner = window.GroupsRunner(window.fetureGroups, window.stepsGroups);
 
