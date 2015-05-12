@@ -14,7 +14,8 @@ require.config({
     callback: function () {
         require([
             'browsered-jasmine-cucumber',
-            'spec/native',
+            //'spec/native',
+            'spec/conceptInfrastructure',
 
             'steps/groups',
             'steps/sendRequest',
