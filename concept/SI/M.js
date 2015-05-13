@@ -21,7 +21,8 @@ define([
 
                 additional: {
                     vm: undefined,
-                    makeUi: makeUi
+                    makeUi: makeUi,
+                    loadConfig: loadConfig
                 }
             }),
             i = {
@@ -48,6 +49,17 @@ define([
 
                 ko.applyBindings(vm, element);
             });
+        }
+
+        function loadConfig(c){
+            //var notifier = new $.Deferred();
+
+            var onStereotypes = m.stereotypes.addUrls(
+                '',
+                c.loading.stereotypes
+            );
+
+            return onStereotypes;
         }
     };
 });

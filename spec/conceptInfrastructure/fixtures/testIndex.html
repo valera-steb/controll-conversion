@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script src="../../../lib/knockout/knockout-3.2.0.js"></script>
+    <script src="../../../lib/jquery/jquery-1.11.0.min.js"></script>
+
+</head>
+<body>
+<script type="text/javascript" src="../../../lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    require.config({
+        baseUrl: '../../',
+
+        paths: {
+            'toolBox': '../../toolBox',
+            'native': '../../native',
+            'text': '../../lib/requirejs/text',
+            'SI': '../concept/SI'
+        },
+
+        deps: [
+            'conceptInfrastructure/fixtures/stereotypes',
+            'conceptInfrastructure/fixtures/targets'
+        ],
+
+        callback: function () {
+            require([
+                'conceptInfrastructure/fixtures/M'
+            ], function (M) {
+                M();
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

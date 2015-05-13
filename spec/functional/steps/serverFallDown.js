@@ -10,5 +10,5 @@ featureSteps('отпадание сервера')
         this.vm.serverModel.isActive(action!=fall);
     })
     .when('клиент отменил запрос', function(){
-
+        //TODO: почему пусто в when?
     });
