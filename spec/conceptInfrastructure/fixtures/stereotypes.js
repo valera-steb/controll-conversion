@@ -19,7 +19,7 @@ define('App/stereotypes/_02_numberChanged', [
         //var number =
         //TODO: проверить, что точно есть оповещение если 2 одинаковых числа ввести
         return new Stereotype(
-            '03.number is changed',
+            '02.number is changed',
             ou.interface.number
         );
     }
@@ -34,7 +34,7 @@ define('App/stereotypes/_04_failed', [
         ou.core.subscribeToAccumulator(value);
 
         return new Stereotype(
-            '04.accumulator is NaN',
+            '04.accumulator is changed',
             value
         );
     }
