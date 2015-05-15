@@ -23,7 +23,8 @@ define([
                     vm: undefined,
                     makeUi: makeUi,
                     loadConfig: loadConfig
-                }
+                },
+                state: {}
             }),
             i = {
                 stateController: new StateController(),

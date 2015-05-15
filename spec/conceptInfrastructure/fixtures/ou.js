@@ -18,7 +18,7 @@ define(function () {
                 currentCommand;
 
             core.clear = function () {
-                core.accumulator = undefined;
+                accumulator = undefined;
                 notifyAcc();
             };
 
@@ -37,7 +37,7 @@ define(function () {
             };
 
             core.subscribeToAccumulator = function(callback){
-                return postbox.subscribe(callback, "accumulator");
+                return postbox.subscribe(callback, undefined, "accumulator");
             };
             core.getPreviousCommand = function(){
                 return previousCommand();
@@ -49,7 +49,7 @@ define(function () {
 
             function notifyAcc() {
                 postbox.notifySubscribers(
-                    core.accumulator,
+                    accumulator,
                     "accumulator"
                 )
             }

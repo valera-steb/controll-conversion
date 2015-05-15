@@ -23,7 +23,7 @@ define({
 
             {
                 key: 'c1', path: 'App/comparators/_01_hasError',
-                params: ['s4']
+                params: ['s1', 's4']
             },
             {
                 key: 'c2', path: 'App/comparators/_02_hasCommand',

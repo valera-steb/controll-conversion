@@ -1,7 +1,9 @@
 /**
  * Created by steb on 12.01.15.
  */
-define([], function () {
+define([
+    'SI/m/shared/Stereotype'
+], function (Stereotype) {
     return function Stereotypes(m, ou, i) {
         var stereotypes = $.extend(this, {
             items: ko.observableArray([]),
@@ -14,34 +16,39 @@ define([], function () {
         return stereotypes;
 
 
-        function addStereotypes(sFolder, urls) {
+        function addStereotypes(sFolder, config) {
             var
                 deferred = new $.Deferred(),
-                added = urls.length;
+                added = config.length;
 
-            for (var i in urls)
+
+            for (var i in config) {
+                var itemConfig = config[i];
+
                 require(
-                    [sFolder + urls[i]],
-                    function (Registrate) {
-                        addStereotype(
-                            Registrate(
-                                m.appRoot,
-                                ou
-                            ));
-
-                        added--;
-                        if (added < 1)
-                            deferred.resolve();
-                    });
+                    [sFolder + itemConfig.path],
+                    makeRegistrator(itemConfig));
+            }
 
             return deferred.promise();
+
+            function makeRegistrator(params) {
+                return function (file) {
+                    addStereotype(params, file);
+
+                    added--;
+                    if (added < 1)
+                        deferred.resolve();
+                }
+            }
         }
 
-        function addStereotype(item) {
-            stereotypes.map[item.name] = item;
-            stereotypes.items.push(item);
+        function addStereotype(stereotypeConfig, file) {
+            var stereotypeContainer = new Stereotype(
+                stereotypeConfig, file);
 
-            i.stateController.addParameter(item);
+            stereotypes.map[stereotypeConfig.key] = stereotypeContainer;
+            stereotypes.items.push(stereotypeContainer);
         }
     };
 });

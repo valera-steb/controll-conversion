@@ -4,13 +4,21 @@
 require.config({
     paths: {
         'OU': '../OU',
-        'toolBox': '../toolBox'
+        'toolBox': '../toolBox',
+        'SI': '../concept/SI'
     },
+    deps: [
+        'conceptInfrastructure/fixtures/stereotypes',
+        'conceptInfrastructure/fixtures/targets',
+        'conceptInfrastructure/fixtures/comparators'
+    ],
     callback: function () {
         var specs = [
             'ouS/requesterModelSpec',
             "ouS/serverModelSpec",
-            'toolBoxS/graphInfrastructureSpec'
+            'toolBoxS/graphInfrastructureSpec',
+
+            'conceptInfrastructure/tests'
         ];
 
         (function getSpec(id) {

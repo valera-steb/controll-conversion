@@ -511,7 +511,24 @@
 
 
 
+тест компаратора
+testConcept.state.s1 = testConcept.stereotypes.map.s1.create(testConcept, testModel);
+testConcept.state.s4 = testConcept.stereotypes.map.s4.create(testConcept, testModel);
+var comparator = testConcept.stereotypes.map.c1.create(testConcept);
 
+
+
+итого:
+.добавил тест для создания компаратора.
+.тесты для инфраструктуры можно и нужно писать.
+.переправил стереотип и список стереотипов под конфигурацию.
+
+длее:
+.докрыть тестами создание компаратора:
+  .ситуация, когда в состоянии не хватает стереотипа.
+
+.процедура загрузки функции/компаратора.
+.а над ней - процедура смены режима.
 
 
 
