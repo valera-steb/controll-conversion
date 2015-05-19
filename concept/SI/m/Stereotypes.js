@@ -21,6 +21,7 @@ define([
                 deferred = new $.Deferred(),
                 added = config.length;
 
+            // TODO: use SI/m/i/batchLoader
 
             for (var i in config) {
                 var itemConfig = config[i];

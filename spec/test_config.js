@@ -18,7 +18,9 @@ require.config({
             "ouS/serverModelSpec",
             'toolBoxS/graphInfrastructureSpec',
 
-            'conceptInfrastructure/tests'
+            'conceptInfrastructure/tests',
+            'conceptInfrastructure/modeLoaderTests',
+            'conceptInfrastructure/executorTests'
         ];
 
         (function getSpec(id) {
