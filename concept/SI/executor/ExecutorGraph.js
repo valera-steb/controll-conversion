@@ -3,16 +3,16 @@
  */
 define({
 
-    actions: ['free', 'watching', 'calculating',
+    states: ['free', 'watching', 'calculating',
         'applying', 'finishing'],
 
-    states: ['load', 'stop', 'allComparatorsOk',
+    actions: ['load', 'stop', 'allComparatorsOk',
         'onComparatorChange', 'hasControlImpact', 'controlImpactFree'],
 
     getTransitions: function (s, a, v) {
         return [
             [s.free, [
-                [a.load, s.watching],
+                [a.load, s.watching, v.hasConcept],
 
                 [a.onComparatorChange, s.free],
                 [a.allComparatorsOk, s.free],
@@ -42,7 +42,8 @@ define({
     },
 
     validators: {
-        x: function (params, graph) {
+        hasConcept: function (params, graph) {
+            return params.concept != undefined;
         }
     }
 });

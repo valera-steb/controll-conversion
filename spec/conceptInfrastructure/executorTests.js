@@ -4,8 +4,9 @@
 define([
     'conceptInfrastructure/fixtures/executorConfig',
     'conceptInfrastructure/fixtures/ou',
-    'SI/executor/Executor'
-], function (executorConfig, Ou, Executor) {
+    'SI/executor/Executor',
+    'toolBox/automate/Tasker'
+], function (executorConfig, Ou, Executor, Tasker) {
 
     describe('SI/executor', function () {
         var ou, x, executer;
@@ -14,7 +15,7 @@ define([
             ou = new Ou();
             x = new executorConfig({}, ou);
             ou.core.setUp(0);
-            executer = new Executor();
+            executer = new Executor(new Tasker());
         });
 
         describe('stub', function () {
@@ -45,16 +46,36 @@ define([
         });
 
 
-        it('должен загружать связанный режим и подключать его (куда?)', function(){
-            executer.load(x);
+        describe('по загрузке', function () {
+            var graph;
+
+            beforeEach(function(){
+                graph = executer.info.graph;
+            });
+
+            it('должен подключать компараторы на прослушку', function () {
+                expect(graph.state.current()).toBe(graph.state.all.free);
+
+                executer.load({concept: x});
+                expect(graph.state.current()).toBe(graph.state.all.watching);
+
+                ou.core.setUp(NaN);
+                expect(graph.state.current()).toBe(graph.state.all.calculating);
+            });
+
         });
+
+        //todo: !!! додумался как тестить структуру не выдёргивая её внутренности - ниже
+        /*
+        по проялениям в оу. Ведь его параметры будут изменяться
+         */
 
         //it('должен ')
         /*
-        помечать инвалидные цели
-        формировать вектор ошибки
-        выбирать управляющую функцию - по наиболее приоритетной ошибке
-        применять сформированное управляющее воздействие
+         помечать инвалидные цели
+         формировать вектор ошибки
+         выбирать управляющую функцию - по наиболее приоритетной ошибке
+         применять сформированное управляющее воздействие
          */
     });
 });

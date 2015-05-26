@@ -14,13 +14,15 @@ require.config({
     ],
     callback: function () {
         var specs = [
+            'conceptInfrastructure/executorTests',
+            'conceptInfrastructure/executorPartsTests',
+
             'ouS/requesterModelSpec',
             "ouS/serverModelSpec",
             'toolBoxS/graphInfrastructureSpec',
 
             'conceptInfrastructure/tests',
-            'conceptInfrastructure/modeLoaderTests',
-            'conceptInfrastructure/executorTests'
+            'conceptInfrastructure/modeLoaderTests'
         ];
 
         (function getSpec(id) {

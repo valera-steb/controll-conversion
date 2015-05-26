@@ -125,18 +125,19 @@ define([],
                 for (var i in list) {
                     list[i] = new Constructor(
                         structStub.stereotypes,
-                        list[i]
+                        list[i], i
                     )
                 }
             }
         };
 
-        function ComparatorConstructor(stereotypesMap, params) {
+        function ComparatorConstructor(stereotypesMap, params, i) {
             var computed = ko.computed(calculate);
 
             return {
                 value: computed,
-                dispouse: computed.dispose
+                dispose: computed.dispose,
+                key: i
             };
 
             function calculate() {
