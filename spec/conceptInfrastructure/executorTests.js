@@ -15,7 +15,7 @@ define([
             ou = new Ou();
             x = new executorConfig({}, ou);
             ou.core.setUp(0);
-            executer = new Executor(new Tasker());
+            executer = new Executor(new Tasker(), ou);
         });
 
         describe('stub', function () {

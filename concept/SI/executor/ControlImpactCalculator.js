@@ -28,10 +28,13 @@ define([], function () {
         return function (callbacks, targetVector) {
 
             return function () {
-                var f = search(targetVector());
+                var f = search(targetVector()), controlImpact;
 
                 if (f)
-                    callbacks.has({controlImpact: f()});
+                    controlImpact = f();
+
+                if (controlImpact)
+                    callbacks.has({controlImpact: controlImpact});
                 else
                     callbacks.allComparatorsOk();
             };
@@ -40,7 +43,7 @@ define([], function () {
                 for (var i in vector) {
                     var target = vector[i];
 
-                    if (target.c())
+                    if (target.c.value())
                         return target.f;
                 }
             };

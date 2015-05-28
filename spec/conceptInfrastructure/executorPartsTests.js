@@ -18,49 +18,83 @@ define([
                 cw = new ComparatorsWatcher()
             });
 
-            it('должен отлавливать события от добавленных компораторов, вызывая коллбэк по выходу значение за рамки допустимого', function () {
+            xit('должен отлавливать события от добавленных компораторов, вызывая коллбэк по выходу значение за рамки допустимого', function () {
 
             });
 
-            it('должен отключаться от заданного ключём компаратора', function () {
+            xit('должен отключаться от заданного ключём компаратора', function () {
 
             });
 
-            it('должен освобождать все компараторы', function () {
+            xit('должен освобождать все компараторы', function () {
 
             });
         });
 
         describe('ControlImpactApplier', function () {
-            it('должен сразу применять установленный вектор в режиме RealTime', function () {
-                var
-                    ou = { test: function (x) { } },
-                    iExecutor = {
-                        controlImpactFree: function () {
-                        },
+            var ou, iExecutor, ci;
 
-                        applyMode: ko.observable({
-                            type: 'RealTime',
-                            timeout: undefined
-                        }),
-
-                        iDomainToSu: {}
+            beforeEach(function () {
+                ou = {
+                    test: function (x) {
+                    }
+                };
+                iExecutor = {
+                    controlImpactFree: function () {
                     },
-                    ci = new ControlImpactApplier(ou, iExecutor);
+
+                    applyMode: ko.observable({
+                        type: 'RealTime',
+                        timeout: undefined
+                    }),
+
+                    iDomainToSu: {},
+                    controlImpact: ko.observableArray([])
+                };
+                ci = new ControlImpactApplier(ou, iExecutor);
 
                 spyOn(ou, 'test').and.callThrough();
+            });
 
-                ci.setUpControlImpact([
-                    {
-                        path: 'ou', method: 'test', params: ['101']
-                    }
-                ]);
+            it('должен сразу применять установленный вектор в режиме RealTime', function () {
+                setUpControlImpact();
 
                 expect(ou.test.calls.count()).toBe(1);
                 expect(ou.test.calls.argsFor(0)).toEqual(['101']);
             });
 
-            id('должен применить установленный вектор через заданное время в режиме')
+            it('должен применить установленный вектор через заданное время в режиме Delayed', function(){
+                jasmine.clock().install();
+
+                iExecutor.applyMode().type = 'Delayed';
+                iExecutor.applyMode().timeout = 500;
+                expect(ou.test.calls.count()).toBe(0);
+
+                setUpControlImpact();
+                expect(ou.test.calls.count()).toBe(0);
+
+                jasmine.clock().tick(1000);
+                expect(ou.test.calls.count()).toBe(1);
+                expect(ou.test.calls.argsFor(0)).toEqual(['101']);
+
+                jasmine.clock().uninstall();
+            });
+
+            xit('должен очищать уже применённые действия', function(){
+
+            });
+
+            xit('должен помечать уже применённые действия', function(){});
+
+            xit('при выполнении всех, должен применять только не применённые действия', function(){});
+
+            function setUpControlImpact(){
+                ci.setUpControlImpact([
+                    {
+                        path: 'ou', method: 'test', params: ['101']
+                    }
+                ]);
+            }
         });
     });
 });

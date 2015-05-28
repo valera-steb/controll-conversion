@@ -61,8 +61,14 @@ var interfaceToDomain = {
 
 // таки куда интерфейс? вообще-то si как раз то.
 var interfaceToSi = {
-    getUi: fStub,
-    load: fStub
+    to:{
+        ou: {},
+        tasker: 'нужен для графа'
+    },
+    from: {
+        getUi: fStub,
+        load: fStub
+    }
 };
 
 var internalStructure = {
@@ -91,8 +97,9 @@ define([
     'SI/executor/ExecutorGraph',
     'toolBox/automate/GraphBase',
     'SI/executor/ComparatorsWatcher',
-    'SI/executor/ControlImpactCalculator'
-], function (executorGraph, GraphBase, ComparatorsWatcher, ControlImpactCalculator) {
+    'SI/executor/ControlImpactCalculator',
+    'SI/executor/ControlImpactApplier'
+], function (executorGraph, GraphBase, ComparatorsWatcher, ControlImpactCalculator, ControlImpactApplier) {
     /*
      каковы задачи?
      .загрузить и связать.
@@ -108,7 +115,7 @@ define([
      ..добавить/удалить функцию.
      ..доступ к спискам: целей/функций/стереотипов.
      */
-    return function Executor(tasker) {
+    return function Executor(tasker, ou) {
         var
             ex = this,
             graph = new GraphBase(tasker, executorGraph),
@@ -129,14 +136,16 @@ define([
             calculateControlImpact: new ControlImpactCalculator({
                 has: setUpControlImpact,
                 allComparatorsOk: graph.allComparatorsOk
-            }, s.domain.targetVector)
+            }, s.domain.targetVector),
+
+            controlImpactApplier: new ControlImpactApplier(ou, new ExecutorForApplier())
         };
 
 
         ex.info = {
             graph: graph
         };
-        ex.load = graph.actions.load;
+        ex.load = graph.actions['load'];
         ex.getUi = function () {
 
         };
@@ -171,8 +180,7 @@ define([
                 stereotypes(c.stereotypes);
                 functions(c.functions);
                 targetVector(c.targetVector);
-            }
-            ;
+            };
 
             c.targetVector.forEach(function (target) {
                 s.utils.comparatorsWatcher.addComparator(target.c);
@@ -184,7 +192,22 @@ define([
 
         function setUpControlImpact(vector){
             s.domain.controlImpact(vector);
-            graph.actions.hasControlImpact();
+            graph.actions['hasControlImpact']();
+        }
+
+        function ExecutorForApplier(){
+            this.controlImpactFree = graph.actions['controlImpactFree'];
+            this.applyMode = function(){
+                //TODO: get mode from applyModeController - подумать нужен ли он
+                return {
+                    type: 'Delayed',
+                    timeout: 200
+                }
+            };
+            this.iDomainToSu = {};
+            this.controlImpact = s.domain.controlImpact;
+
+            return this;
         }
     };
 });

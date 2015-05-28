@@ -29,12 +29,14 @@ var interfaceToExecutor = {
         controlImpactFree: fStub,
 
         applyMode: ko.observable({
-            isRealTime: false,
+            type: 'RealTime',
             timeout: 10
         }),
 
         //
-        iDomainToSu: {}
+        iDomainToSu: {},
+
+        controlImpact: ko.observableArray([])
     }
 };
 
@@ -51,7 +53,6 @@ var interfaceFromUi = {
 
 var internalStructure = {
     domain: {
-        controlImpact: ko.observableArray([]),
         ou: {}
     }
 };
@@ -61,7 +62,7 @@ define([], function () {
     return function ControlImpactApplier(ou, iExecutor) {
         var
             cia = this,
-            controlImpact = ko.observableArray([]),
+            //controlImpact = ko.observableArray([]),
             ctx = {
                 ou: ou,
                 su: iExecutor.iDomainToSu
@@ -76,19 +77,35 @@ define([], function () {
         cia.setUpControlImpact = function (p) {
             // в зависимости от режима, применяю ув
             var applyMode = iExecutor.applyMode();
-            controlImpact(p);
+            iExecutor.controlImpact(p);
 
             switch (applyMode.type) {
                 case('RealTime'):
-                    controlImpact().forEach(applyItem);
-                    clearVector();
+                    applyAll();
                     break;
+
+                case('Delayed'):
+                    setTimeout(applyAll, applyMode.timeout);
+                    break;
+
+                case('Optional'):
+                    // enumerate impact items
+                    break;
+
+                default:
+                    throw new Error('No type {0}'.format(applyMode.type));
             }
         };
         return cia;
 
+
+        function applyAll() {
+            iExecutor.controlImpact().forEach(applyItem);
+            clearVector();
+        }
+
         function clearVector() {
-            controlImpact.remove(function (i) {
+            iExecutor.controlImpact.remove(function (i) {
                 return i.applyed;
             });
         }

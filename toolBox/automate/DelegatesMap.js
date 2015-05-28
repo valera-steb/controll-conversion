@@ -31,7 +31,7 @@ define([
                     catch (exception){
                         console.error('Exception in handler', exception);
 
-                        delegates.exceptions.push({
+                        delegatesMap.exceptions.push({
                             delegate: d,
                             exception: exception
                         });
