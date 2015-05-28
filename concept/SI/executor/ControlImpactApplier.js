@@ -24,14 +24,17 @@ var interfaceToExecutor = {
 
         setUpControlImpact: fStub
     },
-    to:{ // в смысле он вызывать может? == получает от меня доступ к
+    to: { // в смысле он вызывать может? == получает от меня доступ к
         // ControlImpactApplier может вызвать на Executor-е
         controlImpactFree: fStub,
 
-        applyMode:ko.observable({
+        applyMode: ko.observable({
             isRealTime: false,
             timeout: 10
-        })
+        }),
+
+        //
+        iDomainToSu: {}
     }
 };
 
@@ -47,7 +50,7 @@ var interfaceFromUi = {
 };
 
 var internalStructure = {
-    domain:{
+    domain: {
         controlImpact: ko.observableArray([]),
         ou: {}
     }
@@ -55,7 +58,53 @@ var internalStructure = {
 
 define([], function () {
     //факт.01: должен менять поведение в зависимости от режима исполнителя
-    return function ControlImpactApplier(ou, controlImpactIsFree) {
-        var cia = this;
+    return function ControlImpactApplier(ou, iExecutor) {
+        var
+            cia = this,
+            controlImpact = ko.observableArray([]),
+            ctx = {
+                ou: ou,
+                su: iExecutor.iDomainToSu
+            };
+
+        cia.getUi = function () {
+
+        };
+        cia.removeUi = function () {
+
+        };
+        cia.setUpControlImpact = function (p) {
+            // в зависимости от режима, применяю ув
+            var applyMode = iExecutor.applyMode();
+            controlImpact(p);
+
+            switch (applyMode.type) {
+                case('RealTime'):
+                    controlImpact().forEach(applyItem);
+                    clearVector();
+                    break;
+            }
+        };
+        return cia;
+
+        function clearVector() {
+            controlImpact.remove(function (i) {
+                return i.applyed;
+            });
+        }
+
+        function applyItem(impactItem) {
+            var
+                call = 'with(ctx){ {0}.{1}.apply(path, params);}';
+
+            with (impactItem) {
+                call = call.format(path, method);
+
+                console.log(call);
+                eval(call);
+            }
+
+            impactItem.applyed = true;
+        }
     };
 });
