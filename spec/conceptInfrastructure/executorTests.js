@@ -69,10 +69,12 @@ define([
                 onState(graph.state.current());
 
                 executer.load({concept: x});
+
                 ou.core.setUp(NaN);
                 jasmine.clock().tick(430);
 
-                expect(history).toBe('');
+                // наличие истории означает, что по установке значения в оу су увидел изменения
+                expect(history).toBe('free => watching => calculating => watching');
             });
 
 
