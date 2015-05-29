@@ -47,27 +47,46 @@ define([
 
 
         describe('по загрузке', function () {
-            var graph;
+            var graph, history, disposables;
 
-            beforeEach(function(){
+            beforeEach(function () {
+                jasmine.clock().install();
+
                 graph = executer.info.graph;
+                history = undefined;
+                disposables = [];
+            });
+            afterEach(function(){
+                jasmine.clock().uninstall();
+
+                disposables.forEach(function (item) {
+                    item.dispose();
+                });
             });
 
             it('должен подключать компараторы на прослушку', function () {
-                expect(graph.state.current()).toBe(graph.state.all.free);
+                graph.state.current.subscribe(onState);
+                onState(graph.state.current());
 
                 executer.load({concept: x});
-                expect(graph.state.current()).toBe(graph.state.all.watching);
-
                 ou.core.setUp(NaN);
-                expect(graph.state.current()).toBe(graph.state.all.calculating);
+                jasmine.clock().tick(430);
+
+                expect(history).toBe('');
             });
 
+
+            function onState(newValue) {
+                if (!history)
+                    history = newValue;
+                else
+                    history += ' => {0}'.format(newValue);
+            }
         });
 
         //todo: !!! додумался как тестить структуру не выдёргивая её внутренности - ниже
         /*
-        по проялениям в оу. Ведь его параметры будут изменяться
+         по проялениям в оу. Ведь его параметры будут изменяться
          */
 
         //it('должен ')

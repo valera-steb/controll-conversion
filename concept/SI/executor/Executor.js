@@ -61,13 +61,19 @@ var interfaceToDomain = {
 
 // таки куда интерфейс? вообще-то si как раз то.
 var interfaceToSi = {
-    to:{
+    to: {
         ou: {},
         tasker: 'нужен для графа'
     },
     from: {
         getUi: fStub,
-        load: fStub
+        load: fStub,
+
+        force: {
+            action: fStub,      // т.е. любое отложенное действие
+            calculating: fStub  // т.е. именно переход который ведёт к расчётам
+            // предпологаеться выделение других действий, которые можно форсировать
+        }
     }
 };
 
@@ -98,8 +104,9 @@ define([
     'toolBox/automate/GraphBase',
     'SI/executor/ComparatorsWatcher',
     'SI/executor/ControlImpactCalculator',
-    'SI/executor/ControlImpactApplier'
-], function (executorGraph, GraphBase, ComparatorsWatcher, ControlImpactCalculator, ControlImpactApplier) {
+    'SI/executor/ControlImpactApplier',
+    'SI/executor/Delayer'
+], function (executorGraph, GraphBase, ComparatorsWatcher, ControlImpactCalculator, ControlImpactApplier, Delayer) {
     /*
      каковы задачи?
      .загрузить и связать.
@@ -131,14 +138,16 @@ define([
         };
 
         s.utils = {
-            comparatorsWatcher: new ComparatorsWatcher(graph.actions.onComparatorChange),
+            comparatorsWatcher: new ComparatorsWatcher(onComparatorChange),
 
             calculateControlImpact: new ControlImpactCalculator({
                 has: setUpControlImpact,
-                allComparatorsOk: graph.allComparatorsOk
+                allComparatorsOk: graph.actions['allComparatorsOk']
             }, s.domain.targetVector),
 
-            controlImpactApplier: new ControlImpactApplier(ou, new ExecutorForApplier())
+            controlImpactApplier: new ControlImpactApplier(ou, new ExecutorForApplier()),
+
+            delayer: new Delayer(new ExecutorForDelayer())
         };
 
 
@@ -180,24 +189,32 @@ define([
                 stereotypes(c.stereotypes);
                 functions(c.functions);
                 targetVector(c.targetVector);
-            };
+            }
+            ;
 
             c.targetVector.forEach(function (target) {
                 s.utils.comparatorsWatcher.addComparator(target.c);
             });
         }
+
         function onLoaded(p) {
             delete graph.params.concept;
         }
 
-        function setUpControlImpact(vector){
+        function setUpControlImpact(vector) {
             s.domain.controlImpact(vector);
             graph.actions['hasControlImpact']();
         }
 
-        function ExecutorForApplier(){
+        function onComparatorChange(params) {
+            s.utils.delayer.call['onComparatorChange'](params);
+        };
+
+
+        // interfaces
+        function ExecutorForApplier() {
             this.controlImpactFree = graph.actions['controlImpactFree'];
-            this.applyMode = function(){
+            this.applyMode = function () {
                 //TODO: get mode from applyModeController - подумать нужен ли он
                 return {
                     type: 'Delayed',
@@ -206,6 +223,20 @@ define([
             };
             this.iDomainToSu = {};
             this.controlImpact = s.domain.controlImpact;
+
+            return this;
+        }
+
+        function ExecutorForDelayer() {
+            this.mode = ko.observable({
+                delayer: {
+                    type: 'Delayed',
+                    timeout: 200
+                }
+            });
+            this.state = graph.state.current;
+            this.states = graph.state.all;
+            this.actions = graph.actions; // GraphAction;
 
             return this;
         }
