@@ -614,9 +614,21 @@ var comparator = testConcept.stereotypes.map.c1.create(testConcept);
 
 
 
+итого:
+.поиски ди для js.
+.ознакомился с wire https://github.com/cujojs/wire/tree/master/docs
+.ещё надо запустить с require.js и посмотреть как происходит оптимизация.
+.и добавить в инфраструктуру библиотеки - для browsered-jasmine-cucumber.
+.разобрать git submodule - как добавить в свой проэкт?
+
++:
+  .подмодули гита.
 
 
 
+
+
+добавил хостинг на http://cpanel.1freehosting.com/
 
 
 

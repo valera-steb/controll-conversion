@@ -190,7 +190,6 @@ define([
                 functions(c.functions);
                 targetVector(c.targetVector);
             }
-            ;
 
             c.targetVector.forEach(function (target) {
                 s.utils.comparatorsWatcher.addComparator(target.c);
